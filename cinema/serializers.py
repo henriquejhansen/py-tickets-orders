@@ -120,20 +120,18 @@ class TicketCreateSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     tickets = TicketSerializer(many=True, read_only=True)
-    tickets_data = TicketCreateSerializer(many=True, write_only=True)
+    tickets_input = TicketCreateSerializer(many=True, write_only=True, source="tickets")
 
     class Meta:
         model = Order
-        fields = ("id", "tickets", "tickets_data", "created_at")
+        fields = ("id", "tickets", "tickets_input", "created_at")
         read_only_fields = ("created_at",)
 
     def validate(self, attrs):
-        tickets_data = attrs.get("tickets_data", [])
+        tickets_data = attrs.get("tickets", [])
 
         if not tickets_data:
-            raise serializers.ValidationError(
-                "At least one ticket is required."
-            )
+            raise serializers.ValidationError("At least one ticket is required.")
 
         for ticket_data in tickets_data:
             movie_session = ticket_data["movie_session"]
@@ -151,15 +149,13 @@ class OrderSerializer(serializers.ModelSerializer):
                 row=row,
                 seat=seat
             ).exists():
-                raise serializers.ValidationError(
-                    "This seat is already taken."
-                )
+                raise serializers.ValidationError("This seat is already taken.")
 
         return attrs
 
     @transaction.atomic
     def create(self, validated_data):
-        tickets_data = validated_data.pop("tickets_data")
+        tickets_data = validated_data.pop("tickets")
         user = self.context["request"].user
         order = Order.objects.create(user=user)
 
