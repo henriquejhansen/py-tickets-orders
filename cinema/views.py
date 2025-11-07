@@ -14,6 +14,7 @@ from .serializers import (
     MovieSessionDetailSerializer,
     OrderSerializer,
 )
+from .filters import MovieFilter, MovieSessionFilter
 
 
 class GenreViewSet(viewsets.ModelViewSet):
@@ -42,7 +43,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     pagination_class = None
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["title", "genres", "actors"]
+    filterset_class = MovieFilter
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -57,7 +58,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     pagination_class = None
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ["movie", "show_time"]
+    filterset_class = MovieSessionFilter
 
     def get_serializer_class(self):
         if self.action == "list":
