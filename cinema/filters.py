@@ -5,10 +5,10 @@ from .models import Movie, MovieSession
 class MovieFilter(django_filters.FilterSet):
     title = django_filters.CharFilter(field_name="title", lookup_expr="icontains")
     genres = django_filters.ModelMultipleChoiceFilter(
-        field_name="genres__name", to_field_name="name", queryset=Movie.objects.none()
+        field_name="genres", queryset=Movie.objects.none()
     )
     actors = django_filters.ModelMultipleChoiceFilter(
-        field_name="actors__full_name", to_field_name="full_name", queryset=Movie.objects.none()
+        field_name="actors", queryset=Movie.objects.none()
     )
 
     class Meta:
