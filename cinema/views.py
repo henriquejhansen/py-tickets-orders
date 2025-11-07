@@ -19,23 +19,27 @@ class GenreViewSet(viewsets.ModelViewSet):
     queryset = Genre.objects.all().order_by("id")
     serializer_class = GenreSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
 
 class ActorViewSet(viewsets.ModelViewSet):
     queryset = Actor.objects.all().order_by("id")
     serializer_class = ActorSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
 
 class CinemaHallViewSet(viewsets.ModelViewSet):
     queryset = CinemaHall.objects.all().order_by("id")
     serializer_class = CinemaHallSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
 
 class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all().order_by("id")
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -48,6 +52,7 @@ class MovieViewSet(viewsets.ModelViewSet):
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = MovieSession.objects.all().order_by("id")
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -60,6 +65,7 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = None
 
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user).order_by("-created_at")
