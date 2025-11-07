@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Genre, Actor, CinemaHall, Movie, MovieSession, Order
 from .serializers import (
     GenreSerializer,
@@ -40,6 +41,8 @@ class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all().order_by("id")
     permission_classes = [AllowAny]
     pagination_class = None
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["title", "genres", "actors"]
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -53,6 +56,8 @@ class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = MovieSession.objects.all().order_by("id")
     permission_classes = [AllowAny]
     pagination_class = None
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["movie", "show_time"]
 
     def get_serializer_class(self):
         if self.action == "list":
